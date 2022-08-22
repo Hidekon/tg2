@@ -19,7 +19,7 @@ public class PrintQuat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        str_text = text1.Split(':');
+        str_text = text2.Split(':');
               
        
     }
