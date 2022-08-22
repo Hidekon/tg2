@@ -35,6 +35,10 @@ public class UdpSocket : MonoBehaviour
     IPEndPoint remoteEndPoint;
     Thread receiveThread; // Receiving Thread
 
+    //String Received
+    public static string[] textArray; 
+
+
     IEnumerator SendDataCoroutine() // DELETE THIS: Added to show sending data from Unity to Python via UDP
     {
         while (true)
@@ -60,7 +64,7 @@ public class UdpSocket : MonoBehaviour
 
     void Awake()
     {
-        // Create remote endpoint (to Matlab) 
+        // Create remote endpoint  
         remoteEndPoint = new IPEndPoint(IPAddress.Parse(IP), txPort);
 
         // Create local client
@@ -89,11 +93,11 @@ public class UdpSocket : MonoBehaviour
                 byte[] data = client.Receive(ref anyIP);
                 string text = Encoding.UTF8.GetString(data);
 
+                text = "4:[1.0,0.0,1,0]";
+                textArray = text.Split(':');
+                
 
-
-
-
-                print(">> " + text);
+                //print(">> " + text);
                 ProcessInput(text);
             }
             catch (Exception err)
@@ -103,7 +107,7 @@ public class UdpSocket : MonoBehaviour
         }
     }
 
-    
+
 
     private void ProcessInput(string input)
     {
@@ -123,33 +127,5 @@ public class UdpSocket : MonoBehaviour
 
         client.Close();
     }
-
- /*   public static Quaternion StringToQuaternion(string sQuaternion)
-    {
-        string[] imuArray = sQuaternion.Split(':');
-
-        if (imuArray[0] == "8")
-        {
-            if (imuArray[1].StartsWith("[") && imuArray[1].EndsWith("]"))
-            {
-                imuArray[1] = imuArray.Substring(1, imuArray.Length - 2);
-            }
-
-            string[] sData = imuArray[1].Split(',');
-        }
-        // Remove the parentheses
-        
-   */     
-
- /*     // store as a Vector3
-        Quaternion result = new Quaternion(
-            float.Parse(sData[0])
-            float.Parse(sData[1]),
-            float.Parse(sData[2]),
-            float.Parse(sData[3]));;
-
-        return result;
-    }
- */
-
+       
 }

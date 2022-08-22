@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Rotator : MonoBehaviour
 {
     public Quaternion startQuaternion;
     public Transform legTransf;
     string stringQuat = "0.0, 0, 0.0, 1.0";
-    public Quaternion newQuat;
+    
+    
+    Quaternion newQuat;
+    public string[] s_text;
+    
 
     void Start()
     {
@@ -17,6 +22,8 @@ public class Rotator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        s_text = UdpSocket.textArray;
+
         if (Input.GetKey(KeyCode.Space))
         {
             Debug.Log(legTransf.rotation);
@@ -61,5 +68,33 @@ public class Rotator : MonoBehaviour
 
         return result;
     }
+
+    public static Quaternion StringToQuaternion2(string sQuaternion)
+    {
+        //Split number of the IMU from Quaternion data
+        string[] imuArray = sQuaternion.Split(':');
+                
+        // Remove the parentheses
+        if (imuArray[1].StartsWith("[") && imuArray[1].EndsWith("]"))
+        {
+            imuArray[1] = imuArray[1].Substring(1, imuArray[1].Length - 2);
+        }
+
+        // Split the items
+        string[] sArray = imuArray[1].Split(',');
+        
+        // Store as a quaternion
+        Quaternion result = new Quaternion(
+            float.Parse(sArray[0]),
+            float.Parse(sArray[1]),
+            float.Parse(sArray[2]),
+            float.Parse(sArray[3]));
+
+        return result;
+                
+    }
+
+
+
 
 }
