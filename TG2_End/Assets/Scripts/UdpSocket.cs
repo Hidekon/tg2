@@ -36,7 +36,8 @@ public class UdpSocket : MonoBehaviour
     Thread receiveThread; // Receiving Thread
 
     //String Received
-    public static string[] textArray; 
+    //public static string[] textArray;
+    public string[] str_text;
 
 
     IEnumerator SendDataCoroutine() // DELETE THIS: Added to show sending data from Unity to Python via UDP
@@ -93,11 +94,8 @@ public class UdpSocket : MonoBehaviour
                 byte[] data = client.Receive(ref anyIP);
                 string text = Encoding.UTF8.GetString(data);
 
-                text = "4:[1.0,0.0,1,0]";
-                textArray = text.Split(':');
-                
-
-                //print(">> " + text);
+                str_text = text.Split(':');                
+                //print(tex/t);
                 ProcessInput(text);
             }
             catch (Exception err)

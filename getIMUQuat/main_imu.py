@@ -1,9 +1,12 @@
- """Getting IMU Quaternions
+"""Getting IMU Quaternions
 
 """
 import traceback
+
+import numpy as np
+
 import serial_operations as serial_op
-from colors import *
+#from colors import *
 import UdpComms as U
 import time
 
@@ -27,11 +30,11 @@ serial_port = serial_op.initialize_imu(imu_configuration)
 
 while True:
     try:
-        print('running...')
+        #print('running...')
         bytes_to_read = serial_port.inWaiting()
 
         if  0 < bytes_to_read > 80:
-            print("bytes > 0")
+            #print("bytes > 0")
             data = serial_port.read(bytes_to_read)
             if data[0] != 0:
                 continue
@@ -39,31 +42,35 @@ while True:
             if data[1] == 1:
                 extracted_data = serial_op.extract_quaternions(data)
                 quaternions = extracted_data['quaternions']
+                quaternions = np.array2string(quaternions, separator=',')
                 print("IMU1: ", quaternions)
                 sock.SendData( str(1) + ':' + str(quaternions))
 
             if data[1] == 2:
                 extracted_data = serial_op.extract_quaternions(data)
                 quaternions = extracted_data['quaternions']
+                quaternions = np.array2string(quaternions, separator=',')
                 print("IMU2: ", quaternions)
                 sock.SendData( str(2) + ':' + str(quaternions))
 
             if data[1] == 4:
                 extracted_data = serial_op.extract_quaternions(data)
                 quaternions = extracted_data['quaternions']
+                quaternions = np.array2string(quaternions,separator=',')
                 print("IMU4: ", quaternions)
                 sock.SendData( str(4) + ':' + str(quaternions))
 
             if data[1] == 8:
                 extracted_data = serial_op.extract_quaternions(data)
                 quaternions = extracted_data['quaternions']
+                quaternions = np.array2string(quaternions, separator=',')
                 print("IMU8: ", quaternions)
                 sock.SendData( str(8) + ':' + str(quaternions))
 
 #               data = sock.ReadReceivedData() # read data
 
     except KeyboardInterrupt:
-        print("Keyboard excpetion occured.")
+        print("Keyboard exception occured.")
         serial_port = serial_op.stop_streaming(serial_port, 
                                                imu_configuration['logical_ids'])
         break

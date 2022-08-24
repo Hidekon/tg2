@@ -364,7 +364,7 @@ MonoBehaviour:
   r_kneeTransf: {fileID: 1523324252}
   l_legTransf: {fileID: 1370543156}
   l_kneeTransf: {fileID: 1558290011}
-  pQuat: {fileID: 1828629413}
+  udp: {fileID: 1911667738}
   s_text: []
 --- !u!4 &1558290011 stripped
 Transform:
@@ -452,7 +452,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1828629413}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6f3fd105630c3f5449a14b6f4e43a1f7, type: 3}
   m_Name: 
@@ -497,7 +497,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1911667738}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e017d4cfdefae284a9227d1df6fb38f8, type: 3}
   m_Name: 
@@ -506,6 +506,7 @@ MonoBehaviour:
   IP: 127.0.0.1
   rxPort: 8000
   txPort: 8001
+  str_text: []
 --- !u!4 &1911667740
 Transform:
   m_ObjectHideFlags: 0

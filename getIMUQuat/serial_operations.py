@@ -2,7 +2,7 @@ import serial.tools.list_ports
 import time
 import numpy as np
 
-from colors import *
+#from colors import *
 
 SMALL_IMU_DONGLE_PORT = 4128
 

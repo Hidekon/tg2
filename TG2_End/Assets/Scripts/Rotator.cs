@@ -22,8 +22,7 @@ public class Rotator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        s_text = UdpSocket.textArray;
-
+        
         if (Input.GetKey(KeyCode.Space))
         {
             Debug.Log(legTransf.rotation);
