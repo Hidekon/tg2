@@ -55,7 +55,7 @@ public class LegsRotation : MonoBehaviour
     //Functions ________________________________________________________________________________________________________
     public static Quaternion StringToQuaternion(string sQuaternion)
     {
-        // Remove the parentheses
+        // Remove the brackets
         if (sQuaternion.StartsWith("[") && sQuaternion.EndsWith("]"))
         {
             sQuaternion = sQuaternion.Substring(1, sQuaternion.Length - 2);

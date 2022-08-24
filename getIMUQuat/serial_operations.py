@@ -143,7 +143,7 @@ def set_streaming_slots(serial_port, logical_ids, commands):
     """
     for id in logical_ids:
         command = create_imu_command(id, 80, commands)
-        print(RED, command)
+        print(command)
         apply_command(serial_port, command, True)
     return serial_port
 
@@ -297,7 +297,7 @@ def initialize_imu(configuration_dict):
     # Find and open serial port for the IMU dongle
     print("Getting imu object:")
     serial_port = get_dongle_object()
-    print(GREEN, "Done.", RESET)
+    print("Done.")
 
     # Clean outputs 
     manual_flush(serial_port)
@@ -321,13 +321,13 @@ def initialize_imu(configuration_dict):
     # Set magnetometer(explain it better), calibGyro if calibGyro=True and Tare sensor
     print('Starting configuration: ')
     configure_sensor(serial_port, configuration_dict)
-    print(GREEN, "Done.", RESET)
+    print("Done.")
 
 
-    print(CYAN, "Starting streamnig.", RESET)
+    print("Starting streamnig.")
     # Start streaming
     start_streaming(serial_port, configuration_dict['logical_ids'])
     
-    print(GREEN, "IMU's ready to use.", RESET)
+    print("IMU's ready to use.")
 
     return serial_port

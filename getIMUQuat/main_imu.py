@@ -1,4 +1,4 @@
-"""Getting IMU Quaternions
+ """Getting IMU Quaternions
 
 """
 import traceback
