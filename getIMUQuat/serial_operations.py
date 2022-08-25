@@ -108,12 +108,14 @@ def start_streaming(serial_port, logical_ids):
         command = create_imu_command(id, 85)
         apply_command(serial_port, command)
     return serial_port
+
 def clean_data_vector(data):
     decoded_data = data.decode()
     cleaned_data = decoded_data.replace('\r\n',' ').split(' ')
     cleaned_data = list(filter(None, cleaned_data))[0].split(",")
     cleaned_data = [float(d) for d in cleaned_data]
     return cleaned_data
+
 def write_command_read_answer(serial_port, logical_ids, command_number, arguments=[]):
     # If it's streaming stop it
     # stop_streaming(serial_port, logical_ids)
@@ -163,17 +165,17 @@ def configure_sensor(serial_port, configDict):
                 "streaming_commands": list of streaming slots
         }
     """
-    if(configDict["disableGyro"]):
+    if (configDict["disableGyro"]):
         for id in configDict["logical_ids"]:
             command = create_imu_command(id, 107)
             apply_command(serial_port, command)
 
-    if(configDict["disableAccelerometer"]):
+    if (configDict["disableAccelerometer"]):
         for id in configDict["logical_ids"]:
             command = create_imu_command(id, 108)
             apply_command(serial_port, command)
 
-    if(configDict["disableCompass"]):
+    if (configDict["disableCompass"]):
         for id in configDict["logical_ids"]:
             command = create_imu_command(id, 109)
             apply_command(serial_port, command)
@@ -269,9 +271,13 @@ def extract_quaternions(data):
         rotation matrix dictionary
     """
     decoded_data = data.decode()
+    print('decoded data: {}'.format(decoded_data))
     list_data = decoded_data.replace('\r\n',' ').split(' ')
+    print(list_data)
     cleaned_list_data = list(filter(None, list_data))
+    print(cleaned_list_data)
     euler_vector = cleaned_list_data[0][3:].split(',')
+    print(euler_vector)
     euler_vector = np.array(euler_vector, dtype=np.float64)
     return {'quaternions': euler_vector}
 
