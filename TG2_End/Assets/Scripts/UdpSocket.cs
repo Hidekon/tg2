@@ -95,7 +95,7 @@ public class UdpSocket : MonoBehaviour
                 string text = Encoding.UTF8.GetString(data);
 
                 str_text = text.Split(':');                
-                //print(tex/t);
+                print(text);
                 ProcessInput(text);
             }
             catch (Exception err)

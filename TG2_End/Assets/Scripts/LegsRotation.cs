@@ -29,28 +29,28 @@ public class LegsRotation : MonoBehaviour
     {
         s_text = udpSocket.str_text;
 
-        
-
-        
+                
         // Compare the IMU number to each part of the leg.
         // 1 = RLeg, 2 = RKnee, 3 = LLeg, 4 = LKnee;
 
-        if (int.Parse(s_text[0]) == 4)
+
+
+        if (int.Parse(s_text[0]) == 1)
         {
             r_legTransf.rotation = StringToQuaternion(s_text[1]);   //Right Leg
         }
 
-        //if (int.Parse(s_text[0]) == 8)
-        //{
-        //    r_kneeTransf.rotation = StringToQuaternion(s_text[1]);  //Right Knee
-        //}
+        if (int.Parse(s_text[0]) == 2)
+        {
+            r_kneeTransf.rotation = StringToQuaternion(s_text[1]);  //Right Knee
+        }
 
-        if (int.Parse(s_text[0]) == 1)
+        if (int.Parse(s_text[0]) == 4)
         {
             l_legTransf.rotation = StringToQuaternion(s_text[1]);   //Left Leg
         }
 
-        if (int.Parse(s_text[0]) == 7)
+        if (int.Parse(s_text[0]) == 5)
         {
             l_kneeTransf.rotation = StringToQuaternion(s_text[1]);  //Left Knee
         }
