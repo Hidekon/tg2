@@ -39,30 +39,22 @@ while True:
                 continue
 
             if data[1] == 1:
-                extracted_data = serial_op.extract_quaternions(data)
-                quaternions = extracted_data['quaternions']
-                quaternions = np.array2string(quaternions, separator=',')
+                quaternions = get_quaternion(data)
                 sock.SendData(str(1) + ':' + str(quaternions))
                 print("IMU1: ", quaternions)
 
             if data[1] == 2:
-                extracted_data = serial_op.extract_quaternions(data)
-                quaternions = extracted_data['quaternions']
-                quaternions = np.array2string(quaternions, separator=',')
+                quaternions = get_quaternion(data)
                 sock.SendData(str(2) + ':' + str(quaternions))
                 print("IMU2: ", quaternions)
 
             if data[1] == 4:
-                extracted_data = serial_op.extract_quaternions(data)
-                quaternions = extracted_data['quaternions']
-                quaternions = np.array2string(quaternions, separator=',')
+                quaternions = get_quaternion(data)
                 sock.SendData(str(4) + ':' + str(quaternions))
                 print("IMU4: ", quaternions)
 
             if data[1] == 5:
-                extracted_data = serial_op.extract_quaternions(data)
-                quaternions = extracted_data['quaternions']
-                quaternions = np.array2string(quaternions, separator=',')
+                quaternions = get_quaternion(data)
                 sock.SendData(str(5) + ':' + str(quaternions))
                 print("IMU5: ", quaternions)
 
@@ -78,3 +70,10 @@ while True:
         serial_port = serial_op.stop_streaming(serial_port, 
                                                imu_configuration['logical_ids'])
         break
+
+def get_quaternion(data):
+    extracted_data = serial_op.extract_quaternions(data)
+    quaternions = extracted_data['quaternions']
+    quaternions = np.array2string(quaternions, separator=',')
+
+    return quaternions
