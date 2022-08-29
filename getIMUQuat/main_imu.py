@@ -46,7 +46,7 @@ while True:
             quat_data = serial_op.extract_quaternions(data)
 
             str_quat_data = f"{quat_data[0]:.4f},{quat_data[1]:.4f},{quat_data[2]:.4f},{quat_data[3]:.4f}"
-
+    
             # for num in quat_data:
             #     if not num:
             #         quaternions = prev_quaternion

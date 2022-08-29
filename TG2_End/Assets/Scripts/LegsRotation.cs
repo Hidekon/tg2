@@ -25,9 +25,9 @@ public class LegsRotation : MonoBehaviour
 
     Quaternion quaternionRLeg;
 
-    Quaternion quaternionOffset;
+    public Quaternion quaternionOffset;
 
-    Quaternion rotQuatX = Quaternion.Euler(90, 0, 0);
+    Quaternion rotQuatY = Quaternion.Euler(0, 90, 0);
     Quaternion rotQuatZ = Quaternion.Euler(0, 0, 90);
 
 
@@ -59,7 +59,7 @@ public class LegsRotation : MonoBehaviour
         {
             //Reset Leg Orientation
 
-            quaternionOffset = Quaternion.Inverose(quaternionRLeg) * rLeg_StartQuat;
+            quaternionOffset = Quaternion.Inverse(quaternionRLeg) * rLeg_StartQuat;
 
         }
 
