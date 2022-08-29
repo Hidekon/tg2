@@ -70,7 +70,7 @@ public class LegsRotation : MonoBehaviour
         
         // Split the items
         string[] sArray = sQuaternion.Split(',');
-        Debug.Log(sQuaternion);
+        
 
         // Store as a Quaternion
         Quaternion result = new Quaternion(
@@ -78,6 +78,7 @@ public class LegsRotation : MonoBehaviour
             float.Parse(sArray[1]),
             float.Parse(sArray[2]),
             float.Parse(sArray[3]));
+        Debug.Log(result);
 
         return result;
     }
