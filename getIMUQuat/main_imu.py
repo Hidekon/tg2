@@ -24,9 +24,52 @@ imu_configuration = {
 serial_port = serial_op.initialize_imu(imu_configuration)
 
 # Largura da janela do filto de mediana móvel, numero de quaternions guardados
-win_size = 9
-mf_window = [np.zeros(4) for _ in range(win_size)]
+# win_size = 9
+# mf_window = [np.zeros(4) for _ in range(win_size)]
 
+
+prev_quaternion = np.zeros(4)
+
+
+while True:
+    try:
+#       print('running...')
+        bytes_to_read = serial_port.inWaiting()
+
+        # NUMERO DO ALEM VAMOS DESCOBRIR PQ - Não tem justificativa ainda.
+        if 0 < bytes_to_read > 80:
+#           print("bytes > 0")
+            data = serial_port.read(bytes_to_read)
+            if data[0] != 0:
+                continue
+
+            quat_data = serial_op.extract_quaternions(data)
+
+            str_quat_data = f"{quat_data[0]:.4f},{quat_data[1]:.4f},{quat_data[2]:.4f},{quat_data[3]:.4f}"
+
+            # for num in quat_data:
+            #     if not num:
+            #         quaternions = prev_quaternion
+            #         continue
+
+            sock.SendData(str(data[1])+':'+str_quat_data)
+
+            print(f"IMU{data[1]}:" + str_quat_data)
+
+            prev_quaternion = quat_data
+
+    except KeyboardInterrupt:
+        print(GREEN, "Keyboard excpetion occured.", RESET)
+        serial_port = serial_op.stop_streaming(serial_port,
+                                               imu_configuration['logical_ids'])
+        break
+    except Exception:
+        print(RED, "Unexpected exception occured.", RESET)
+        print(traceback.format_exc())
+        print(GREEN, "Stop streaming.", RESET)
+        serial_port = serial_op.stop_streaming(serial_port, 
+                                               imu_configuration['logical_ids'])
+        break
 
 def filter(q):
     mf_window.pop(0)
@@ -48,45 +91,3 @@ def filter(q):
     qw = w_list[len(x_list) // 2]
 
     return [qx, qy, qz, qw]
-
-prev_quaternion = np.zeros(4)
-
-while True:
-    try:
-#       print('running...')
-        bytes_to_read = serial_port.inWaiting()
-
-        # NUMERO DO ALEM VAMOS DESCOBRIR PQ - Não tem justificativa ainda.
-        if 0 < bytes_to_read > 80:
-#           print("bytes > 0")
-            data = serial_port.read(bytes_to_read)
-            if data[0] != 0:
-                continue
-
-            quat_data = serial_op.extract_quaternions(data)
-
-            str_quat_data = f"{quat_data[0]:.4f},{quat_data[1]:.4f},{quat_data[2]:.4f},{quat_data[3]:.4f}"
-
-            for num in quat_data:
-                if not num:
-                    quaternions = prev_quaternion
-                    continue
-
-            sock.SendData(str(data[1])+':'+str_quat_data)
-
-            print(f"IMU{data[1]}:" + str_quat_data)
-
-            prev_quaternion = quat_data
-
-    except KeyboardInterrupt:
-        print(GREEN, "Keyboard excpetion occured.", RESET)
-        serial_port = serial_op.stop_streaming(serial_port,
-                                               imu_configuration['logical_ids'])
-        break
-    except Exception:
-        print(RED, "Unexpected exception occured.", RESET)
-        print(traceback.format_exc())
-        print(GREEN, "Stop streaming.", RESET)
-        serial_port = serial_op.stop_streaming(serial_port, 
-                                               imu_configuration['logical_ids'])
-        break

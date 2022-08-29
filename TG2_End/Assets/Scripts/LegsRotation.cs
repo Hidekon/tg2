@@ -18,9 +18,31 @@ public class LegsRotation : MonoBehaviour
     [SerializeField] GameObject udp;
     public string[] s_text;
 
+    Quaternion rLeg_StartQuat;
+    Quaternion rKnee_StartQuat;
+    Quaternion lLeg_StartQuat;
+    Quaternion lKnee_StartQuat;
+
+    Quaternion quaternionRLeg;
+
+    Quaternion quaternionOffset;
+
+    Quaternion rotQuatX = Quaternion.Euler(90, 0, 0);
+    Quaternion rotQuatZ = Quaternion.Euler(0, 0, 90);
+
+
     void Awake()
     {
+        // Create a udp component to grab the data from de UdpSocket script
         udpSocket = udp.GetComponent<UdpSocket>();
+
+        // Grab the initial orientation from the legs
+        rLeg_StartQuat = r_legTransf.rotation;
+        rKnee_StartQuat = r_kneeTransf.rotation;
+        lLeg_StartQuat = l_legTransf.rotation;
+        lKnee_StartQuat = l_kneeTransf.rotation;
+
+        
         Debug.Log(s_text);
     }
 
@@ -29,15 +51,27 @@ public class LegsRotation : MonoBehaviour
     {
         s_text = udpSocket.str_text;
 
-                
+
         // Compare the IMU number to each part of the leg.
         // 1 = RLeg, 2 = RKnee, 3 = LLeg, 4 = LKnee;
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            //Reset Leg Orientation
+
+            quaternionOffset = Quaternion.Inverose(quaternionRLeg) * rLeg_StartQuat;
+
+        }
 
 
 
         if (int.Parse(s_text[0]) == 1)
         {
-            r_legTransf.rotation = StringToQuaternion(s_text[1]);   //Right Leg
+            
+            quaternionRLeg = StringToQuaternion(s_text[1]);
+
+            
+            r_legTransf.rotation = quaternionRLeg * quaternionOffset ;  //Right Leg
         }
 
         if (int.Parse(s_text[0]) == 2)
@@ -61,13 +95,7 @@ public class LegsRotation : MonoBehaviour
     //Functions ________________________________________________________________________________________________________
     public static Quaternion StringToQuaternion(string sQuaternion)
     {
-        // Remove the brackets
-        if (sQuaternion.StartsWith("[") && sQuaternion.EndsWith("]"))
-        {
-            sQuaternion = sQuaternion.Substring(1, sQuaternion.Length - 2);
-        }
-
-        
+                               
         // Split the items
         string[] sArray = sQuaternion.Split(',');
         
@@ -78,10 +106,13 @@ public class LegsRotation : MonoBehaviour
             float.Parse(sArray[1]),
             float.Parse(sArray[2]),
             float.Parse(sArray[3]));
-        Debug.Log(result);
 
         return result;
     }
 
+    public static void Reset_Orientation()
+    {
+
+    }
 
 }
