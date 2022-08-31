@@ -10,9 +10,6 @@ import UdpComms as U
 
 # Create UDP socket to use for sending (and receiving)
 sock = U.UdpComms(udpIP="127.0.0.1", portTX=8000, portRX=8001, enableRX=True, suppressWarnings=True)
-
-i = 0
-
 # Set parameters that will be configured
 imu_configuration = {
     "disableCompass": True,
@@ -26,11 +23,30 @@ imu_configuration = {
 }
 serial_port = serial_op.initialize_imu(imu_configuration)
 
+# Largura da janela do filto de mediana móvel, numero de quaternions guardados
+# win_size = 9
+# mf_window = [np.zeros(4) for _ in range(win_size)]
+
+
+prev_quaternion = np.zeros(4)
+
+
 while True:
     try:
+
+        #Calibrate sensor from Unity 
+        data = sock.ReadReceivedData() # read data
+        if data != None: # if NEW data has been received since last ReadReceivedData function call
+            print(data) # print new received data
+
+            if data == "c":
+                command = create_imu_command(id, 96)
+                apply_command(serial_port, command)
+
+
 #       print('running...')
         bytes_to_read = serial_port.inWaiting()
-
+        
         # NUMERO DO ALEM VAMOS DESCOBRIR PQ - Não tem justificativa ainda.
         if 0 < bytes_to_read > 80:
 #           print("bytes > 0")
@@ -38,25 +54,20 @@ while True:
             if data[0] != 0:
                 continue
 
-            if data[1] == 1:
-                quaternions = get_quaternion(data)
-                sock.SendData(str(1) + ':' + str(quaternions))
-                print("IMU1: ", quaternions)
+            quat_data = serial_op.extract_quaternions(data)
 
-            if data[1] == 2:
-                quaternions = get_quaternion(data)
-                sock.SendData(str(2) + ':' + str(quaternions))
-                print("IMU2: ", quaternions)
+            str_quat_data = f"{quat_data[0]:.4f},{quat_data[1]:.4f},{quat_data[2]:.4f},{quat_data[3]:.4f}"
+    
+            # for num in quat_data:
+            #     if not num:
+            #         quaternions = prev_quaternion
+            #         continue
 
-            if data[1] == 4:
-                quaternions = get_quaternion(data)
-                sock.SendData(str(4) + ':' + str(quaternions))
-                print("IMU4: ", quaternions)
+            sock.SendData(str(data[1])+':'+str_quat_data)
 
-            if data[1] == 5:
-                quaternions = get_quaternion(data)
-                sock.SendData(str(5) + ':' + str(quaternions))
-                print("IMU5: ", quaternions)
+            print(f"IMU{data[1]}:" + str_quat_data)
+
+            prev_quaternion = quat_data
 
     except KeyboardInterrupt:
         print(GREEN, "Keyboard excpetion occured.", RESET)
@@ -71,9 +82,23 @@ while True:
                                                imu_configuration['logical_ids'])
         break
 
-def get_quaternion(data):
-    extracted_data = serial_op.extract_quaternions(data)
-    quaternions = extracted_data['quaternions']
-    quaternions = np.array2string(quaternions, separator=',')
+def filter(q):
+    mf_window.pop(0)
+    mf_window.append(q)
 
-    return quaternions
+    x_list = [quat[0] for quat in mf_window]
+    y_list = [quat[1] for quat in mf_window]
+    z_list = [quat[2] for quat in mf_window]
+    w_list = [quat[3] for quat in mf_window]
+
+    x_list.sort()
+    y_list.sort()
+    z_list.sort()
+    w_list.sort()
+
+    qx = x_list[len(x_list) // 2]
+    qy = y_list[len(x_list) // 2]
+    qz = z_list[len(x_list) // 2]
+    qw = w_list[len(x_list) // 2]
+
+    return [qx, qy, qz, qw]
