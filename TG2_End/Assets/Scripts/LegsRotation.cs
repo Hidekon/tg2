@@ -131,10 +131,5 @@ public class LegsRotation : MonoBehaviour
 
         return result;
     }
-
-    public static void Reset_Orientation()
-    {
-
-    }
-
+        
 }
