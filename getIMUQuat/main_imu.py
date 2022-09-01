@@ -33,8 +33,29 @@ prev_quaternion = np.zeros(4)
 
 while True:
     try:
-#       print('running...')
+        #Calibrate sensor from Unity
+        data = sock.ReadReceivedData()
+        if data != None:
+            print(data)
+
+            if data == "c":
+                print("Calibrated Gyroscope ")
+
+                # for id in "logical_ids":
+                #     command = serial_op.create_imu_command(id, 107)
+                #     serial_op.apply_command(serial_port, command)
+                #     print("Disable Gyro")
+                #
+                #     command = serial_op.create_imu_command(id, 165)
+                #     serial_op.apply_command(serial_port, command)
+                #     print("Autocalibrate")
+
+                # print("Calibrated Tared Sensor ")
+                data = None
+
+        #       print('runnin    g...')
         bytes_to_read = serial_port.inWaiting()
+
 
         # NUMERO DO ALEM VAMOS DESCOBRIR PQ - Não tem justificativa ainda.
         if 0 < bytes_to_read > 80:
@@ -46,7 +67,7 @@ while True:
             quat_data = serial_op.extract_quaternions(data)
 
             str_quat_data = f"{quat_data[0]:.4f},{quat_data[1]:.4f},{quat_data[2]:.4f},{quat_data[3]:.4f}"
-    
+
             # for num in quat_data:
             #     if not num:
             #         quaternions = prev_quaternion
@@ -56,7 +77,7 @@ while True:
 
             print(f"IMU{data[1]}:" + str_quat_data)
 
-            prev_quaternion = quat_data
+            # prev_quaternion = quat_data
 
     except KeyboardInterrupt:
         print(GREEN, "Keyboard excpetion occured.", RESET)
@@ -71,23 +92,23 @@ while True:
                                                imu_configuration['logical_ids'])
         break
 
-def filter(q):
-    mf_window.pop(0)
-    mf_window.append(q)
-
-    x_list = [quat[0] for quat in mf_window]
-    y_list = [quat[1] for quat in mf_window]
-    z_list = [quat[2] for quat in mf_window]
-    w_list = [quat[3] for quat in mf_window]
-
-    x_list.sort()
-    y_list.sort()
-    z_list.sort()
-    w_list.sort()
-
-    qx = x_list[len(x_list) // 2]
-    qy = y_list[len(x_list) // 2]
-    qz = z_list[len(x_list) // 2]
-    qw = w_list[len(x_list) // 2]
-
-    return [qx, qy, qz, qw]
+# def filter(q):
+#     mf_window.pop(0)
+#     mf_window.append(q)
+#
+#     x_list = [quat[0] for quat in mf_window]
+#     y_list = [quat[1] for quat in mf_window]
+#     z_list = [quat[2] for quat in mf_window]
+#     w_list = [quat[3] for quat in mf_window]
+#
+#     x_list.sort()
+#     y_list.sort()
+#     z_list.sort()
+#     w_list.sort()
+#
+#     qx = x_list[len(x_list) // 2]
+#     qy = y_list[len(x_list) // 2]
+#     qz = z_list[len(x_list) // 2]
+#     qw = w_list[len(x_list) // 2]
+#
+#     return [qx, qy, qz, qw]

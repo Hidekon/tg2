@@ -170,8 +170,8 @@ def configure_sensor(serial_port, configDict):
 
     if(configDict["disableAccelerometer"]):
         for id in configDict["logical_ids"]:
-            command = create_imu_command(id, 108)
-            apply_command(serial_port, command)
+             command = create_imu_command(id, 108)
+             apply_command(serial_port, command)
 
     if(configDict["disableCompass"]):
         for id in configDict["logical_ids"]:
@@ -329,5 +329,57 @@ def initialize_imu(configuration_dict):
     start_streaming(serial_port, configuration_dict['logical_ids'])
     
     print("IMU's ready to use.")
+
+    return serial_port
+
+
+def reinitialize_imu(configuration_dict):
+    """ Initialize imu dongle and sensor
+
+    Args:
+        configDict: dictionary with sensor basic configuration {
+                "disableCompass": Boolean,
+                "disableGyro": Boolean,
+                "disableAccelerometer": Boolean,
+                "gyroAutoCalib": Boolean,
+                "tareSensor": Boolean,
+                "filterMode": Integer (see user's manual)
+                "logical_ids": list of logical ids,
+                "streaming_commands": list of streaming slots
+        }
+
+    Returns:
+        serial_port: PySerial Object
+
+    """
+
+    # Clean outputs
+    manual_flush(serial_port)
+
+    # Stop streaming
+    print("Stoping streaming.")
+    stop_streaming(serial_port, configuration_dict['logical_ids'])
+
+    # Setting streaming slots, this means that while streaming sensors will send
+    # this data to the dongle as in page 29 - User manual:
+    # 0 - Differential quaternions;
+    # 1 - tared orientation as euler angles;
+    # 2 - rotation matrix
+    # 255 - No data
+    # See user manual to get more information
+    set_streaming_slots(serial_port,
+                        configuration_dict['logical_ids'],
+                        configuration_dict['streaming_commands'])
+
+    # Set magnetometer, calibGyro if calibGyro=True and Tare sensor
+    print('Starting configuration: ')
+    configure_sensor(serial_port, configuration_dict)
+    print("Done.")
+
+    print("Starting streamnig.")
+    # Start streaming
+    start_streaming(serial_port, configuration_dict['logical_ids'])
+
+    print("Serial Reset")
 
     return serial_port
