@@ -10,11 +10,9 @@ SMALL_IMU_DONGLE_PORT = 4128
 # sudo chmod 666 /dev/ttyACM0 -> with the correspondent COM port
 def get_dongle_object():
     """ Create a serial port object to operate with imu dongle
-    
     Returns: 
         serial_port: PySerial object
     """
-
     # Lists available ports and select dongle port
     ports_list = serial.tools.list_ports.comports()
     print("Ports available: ")

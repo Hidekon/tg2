@@ -23,13 +23,7 @@ imu_configuration = {
 }
 serial_port = serial_op.initialize_imu(imu_configuration)
 
-# Largura da janela do filto de mediana móvel, numero de quaternions guardados
-# win_size = 9
-# mf_window = [np.zeros(4) for _ in range(win_size)]
-
-
 prev_quaternion = np.zeros(4)
-
 
 while True:
     try:
@@ -39,45 +33,22 @@ while True:
             print(data)
 
             if data == "c":
-                print("Calibrated Gyroscope ")
+                print("Received data from Unity ")
 
-                # for id in "logical_ids":
-                #     command = serial_op.create_imu_command(id, 107)
-                #     serial_op.apply_command(serial_port, command)
-                #     print("Disable Gyro")
-                #
-                #     command = serial_op.create_imu_command(id, 165)
-                #     serial_op.apply_command(serial_port, command)
-                #     print("Autocalibrate")
-
-                # print("Calibrated Tared Sensor ")
                 data = None
 
-        #       print('runnin    g...')
         bytes_to_read = serial_port.inWaiting()
 
-
-        # NUMERO DO ALEM VAMOS DESCOBRIR PQ - Não tem justificativa ainda.
+        # Read data from sensors and sent to Unity in better format.
         if 0 < bytes_to_read > 80:
-#           print("bytes > 0")
             data = serial_port.read(bytes_to_read)
             if data[0] != 0:
                 continue
 
             quat_data = serial_op.extract_quaternions(data)
-
             str_quat_data = f"{quat_data[0]:.4f},{quat_data[1]:.4f},{quat_data[2]:.4f},{quat_data[3]:.4f}"
-
-            # for num in quat_data:
-            #     if not num:
-            #         quaternions = prev_quaternion
-            #         continue
-
             sock.SendData(str(data[1])+':'+str_quat_data)
-
             print(f"IMU{data[1]}:" + str_quat_data)
-
-            # prev_quaternion = quat_data
 
     except KeyboardInterrupt:
         print(GREEN, "Keyboard excpetion occured.", RESET)
