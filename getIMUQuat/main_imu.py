@@ -47,8 +47,9 @@ while True:
 
             quat_data = serial_op.extract_quaternions(data)
             str_quat_data = f"{quat_data[0]:.4f},{quat_data[1]:.4f},{quat_data[2]:.4f},{quat_data[3]:.4f}"
-            sock.SendData(str(data[1])+':'+str_quat_data)
             print(f"IMU{data[1]}:" + str_quat_data)
+
+            sock.SendData(str(data[1])+':'+str_quat_data)
 
     except KeyboardInterrupt:
         print(GREEN, "Keyboard excpetion occured.", RESET)

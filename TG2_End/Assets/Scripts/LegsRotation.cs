@@ -111,23 +111,17 @@ public class LegsRotation : MonoBehaviour
             l_kneeTransf.rotation = StringToQuaternion(s_text[1]) * quat_LKnee_Offset;  //Left Knee
         }
 
-
+         
     }
 
     //Functions ________________________________________________________________________________________________________
     public static Quaternion StringToQuaternion(string sQuaternion)
-    {
-                               
+    {                              
         // Split the items
-        string[] sArray = sQuaternion.Split(',');
-        
-
+        string[] sArray = sQuaternion.Split(',');       
         // Store as a Quaternion
-        Quaternion result = new Quaternion(
-            float.Parse(sArray[0]),
-            float.Parse(sArray[1]),
-            float.Parse(sArray[2]),
-            float.Parse(sArray[3]));
+        Quaternion result = new Quaternion( float.Parse(sArray[0]), float.Parse(sArray[1]), 
+                                            float.Parse(sArray[2]), float.Parse(sArray[3]));
 
         return result;
     }
