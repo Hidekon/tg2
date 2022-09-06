@@ -12,9 +12,7 @@ public class LegsRotation : MonoBehaviour
 
     // Acess the string from another script
 
-    UdpSocket udpSocket;
-    //PrintQuat printQuat;
-    
+    UdpSocket udpSocket;        
     [SerializeField] GameObject udp;
     public string[] s_text;
 
@@ -27,6 +25,11 @@ public class LegsRotation : MonoBehaviour
     Quaternion quat_RKnee_Offset;
     Quaternion quat_LLeg_Offset;
     Quaternion quat_LKnee_Offset;
+
+    public Quaternion q_RL ;
+    public Quaternion q_RK ;
+    public Quaternion q_LL ;
+    public Quaternion q_LK ;
 
 
     public Quaternion quaternionRLegOffset;
@@ -89,11 +92,12 @@ public class LegsRotation : MonoBehaviour
             udpSocket.SendData("c");
         }
 
+        // ____________________________________________________________________________________________
 
         if (int.Parse(s_text[0]) == 1)
         {
-                                    
-            r_legTransf.rotation = StringToQuaternion(s_text[1]) * quat_RLeg_Offset ;  //Right Leg
+            q_RL = StringToQuaternion(s_text[1]);
+            r_legTransf.rotation = q_RL * quat_RLeg_Offset ;  //Right Leg
         }
 
         if (int.Parse(s_text[0]) == 2)
