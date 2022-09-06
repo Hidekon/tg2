@@ -273,7 +273,7 @@ def extract_quaternions(data):
     cleaned_list_data = list(filter(None, list_data))
     euler_vector = cleaned_list_data[0][3:].split(',')
     euler_vector = np.array(euler_vector, dtype=np.float64)
-    return {'quaternions': euler_vector}
+    return euler_vector
 
 def initialize_imu(configuration_dict):
     """ Initialize imu dongle and sensor
