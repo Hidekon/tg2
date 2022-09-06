@@ -45,8 +45,7 @@ public class LegsRotation : MonoBehaviour
         rKnee_StartQuat = r_kneeTransf.rotation;
         lLeg_StartQuat = l_legTransf.rotation;
         lKnee_StartQuat = l_kneeTransf.rotation;
-
-        
+                
         Debug.Log(s_text);
     }
 
@@ -55,63 +54,52 @@ public class LegsRotation : MonoBehaviour
     {
         s_text = udpSocket.str_text;
 
-
-        // Compare the IMU number to each part of the leg.
-        // 1 = RLeg, 2 = RKnee, 3 = LLeg, 4 = LKnee;
+        // Calculate Quaternion Offset to position legs on default position
 
         if (Input.GetKey(KeyCode.Space))
         {
-            if (int.Parse(s_text[0]) == 1)
-            {
+            if (int.Parse(s_text[0]) == 1) {
                 quat_RLeg_Offset = Quaternion.Inverse(StringToQuaternion(s_text[1])) * rLeg_StartQuat;                                
             }
 
-            if (int.Parse(s_text[0]) == 2)
-            {
+            if (int.Parse(s_text[0]) == 2) {
                 quat_RKnee_Offset = Quaternion.Inverse(StringToQuaternion(s_text[1])) * rKnee_StartQuat;
             }
 
-            if (int.Parse(s_text[0]) == 4)
-            {
+            if (int.Parse(s_text[0]) == 4) {
                 quat_LLeg_Offset = Quaternion.Inverse(StringToQuaternion(s_text[1])) * lLeg_StartQuat;
             }
 
-            if (int.Parse(s_text[0]) == 5)
-            {
+            if (int.Parse(s_text[0]) == 5) {
                 quat_LKnee_Offset = Quaternion.Inverse(StringToQuaternion(s_text[1])) * lKnee_StartQuat;
             }
-
         }
 
         if (Input.GetKey(KeyCode.C))
         {
-            //Send data to python to tare sensor
+            //Send data to python 
             udpSocket.SendData("c");
         }
 
 
-        if (int.Parse(s_text[0]) == 1)
-        {
-                                    
+        // Compare the IMU number to each part of the leg.
+        // 1 = Right Leg, 2 = Right Knee, 4 = Left Leg, 5 = Left Knee;
+
+        if (int.Parse(s_text[0]) == 1) {                                    
             r_legTransf.rotation = StringToQuaternion(s_text[1]) * quat_RLeg_Offset ;  //Right Leg
         }
 
-        if (int.Parse(s_text[0]) == 2)
-        {
+        if (int.Parse(s_text[0]) == 2) {
             r_kneeTransf.rotation = StringToQuaternion(s_text[1]) * quat_RKnee_Offset;  //Right Knee
         }
 
-        if (int.Parse(s_text[0]) == 4)
-        {
+        if (int.Parse(s_text[0]) == 4) {
             l_legTransf.rotation = StringToQuaternion(s_text[1]) * quat_LLeg_Offset;   //Left Leg
         }
 
-        if (int.Parse(s_text[0]) == 5)
-        {
+        if (int.Parse(s_text[0]) == 5) {
             l_kneeTransf.rotation = StringToQuaternion(s_text[1]) * quat_LKnee_Offset;  //Left Knee
-        }
-
-         
+        }         
     }
 
     //Functions ________________________________________________________________________________________________________
