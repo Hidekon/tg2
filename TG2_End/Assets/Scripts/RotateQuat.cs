@@ -29,6 +29,6 @@ public class RotateQuat : MonoBehaviour
     void Update()
     {
 
-        transform.rotation = legsRotation.q_RL;
+        //transform.rotation = legsRotation.q_RL;
     }
 }
