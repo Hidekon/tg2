@@ -5,12 +5,9 @@ class UdpComms():
         """
         Constructor
         :param udpIP: Must be string e.g. "127.0.0.1"
-        :param portTX: integer number e.g. 8000. Port to transmit from i.e From Python to other application
-        :param portRX: integer number e.g. 8001. Port to receive on i.e. From other application to Python
-        :param enableRX: When False you may only send from Python and not receive. If set to True a thread is created to enable receiving of data
-        :param suppressWarnings: Stop printing warnings if not connected to other application
+        :param portTX: integer number e.g. 8000. Port to transmit
+        :param portRX: integer number e.g. 8001. Port to receive
         """
-
         import socket
 
         self.udpIP = udpIP
