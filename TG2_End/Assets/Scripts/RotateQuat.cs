@@ -17,7 +17,7 @@ public class RotateQuat : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        legsRotation = legR.GetComponent<LegsRotation>();
+        //legsRotation = legR.GetComponent<LegsRotation>();
 
         //quat = Quaternion.Euler(-90, 0, -90);
         //transform.rotation = transform.localRotation * quat;
