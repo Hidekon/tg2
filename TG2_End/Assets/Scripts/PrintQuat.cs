@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class PrintQuat : MonoBehaviour
 {
-    string text1 = "1:[1,0,0,1]";
     string text2 = "2:[0,0,0,1]";
-    string text3 = "3:[1,0,0,1]";
-    string text4 = "4:[0,0,0,1]";
-
+    
     public string[] str_text;
 
     void Start()
