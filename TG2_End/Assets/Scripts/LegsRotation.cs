@@ -96,13 +96,21 @@ public class LegsRotation : MonoBehaviour
 
         if (int.Parse(s_text[0]) == 1)
         {
+            Quaternion current = r_legTransf.localRotation;
+
             q_RL = StringToQuaternion(s_text[1]);
-            r_legTransf.rotation = q_RL * quat_RLeg_Offset ;  //Right Leg
+
+            r_legTransf.localRotation = Quaternion.Slerp(current, q_RL * quat_RLeg_Offset, Time.deltaTime) ;  //Right Leg
+
+            
         }
 
         if (int.Parse(s_text[0]) == 2)
         {
-            r_kneeTransf.rotation = StringToQuaternion(s_text[1]) * quat_RKnee_Offset;  //Right Knee
+            Quaternion current = r_kneeTransf.localRotation;
+
+            r_kneeTransf.localRotation = Quaternion.Slerp(current, StringToQuaternion(s_text[1]) * quat_RKnee_Offset, Time.deltaTime);  //Right Knee
+                        
         }
 
         if (int.Parse(s_text[0]) == 4)

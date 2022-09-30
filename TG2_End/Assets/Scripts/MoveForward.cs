@@ -6,6 +6,7 @@ public class MoveForward : MonoBehaviour
 {
     public GameObject tip;
     public Vector3 tipPosition;
+    public float distance;
 
     Vector3 prevTipPosition;
 
@@ -19,7 +20,9 @@ public class MoveForward : MonoBehaviour
     void Update()
     {
         Debug.Log(tipPosition);
-        prevTipPosition = tipPosition;          
+        prevTipPosition = tipPosition;
+
+        transform.Translate(0, 0, distance * Time.deltaTime);
         
     }
 
